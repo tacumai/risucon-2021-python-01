@@ -151,7 +151,7 @@ def post_users():
         abort(400)
 
     data = request.json
-
+    app.logger.debug(data)
     username = data.get('username', '')
     password = data.get('password', '')
 
