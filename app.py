@@ -331,14 +331,16 @@ def get_items():
     try:
         with conn.cursor() as cursor:
             if sort == 'like':
-                query = 'SELECT id, user_id, title, likes, created_at ' \
-                        'FROM items;'
+                #query = 'SELECT id, user_id, title, likes, created_at ' \
+                #        'FROM items;'
+                query = 'SELECT i.id as id, u.username as username, i.title as title, i.likes as likes, i.created_at as created_at FROM items as i LEFT OUTER JOIN users as u ON i.user_id = u.id;'
                 cursor.execute(query,)
                 app.logger.debug(cursor._last_executed)
             else:
-                query = 'SELECT id, user_id, title, likes, created_at ' \
-                        'FROM items ORDER BY created_at DESC '\
-                        'LIMIT %s OFFSET %s ;'
+                #query = 'SELECT id, user_id, title, likes, created_at ' \
+                #        'FROM items ORDER BY created_at DESC '\
+                #        'LIMIT %s OFFSET %s ;'
+                query = 'SELECT i.id as id, u.username as username, i.title as title, i.likes as likes, i.created_at as created_at FROM items as i LEFT OUTER JOIN users as u ON i.user_id = u.id ORDER BY created_at DESC LIMIT %s OFFSET %s;'
                 cursor.execute(query, (ITEM_LIMIT, offset,))
                 app.logger.debug(cursor._last_executed)
 
@@ -361,12 +363,12 @@ def get_items():
             result = list()
         else:
             for i, item in enumerate(result):
-                with conn.cursor() as cursor:
-                    query = 'SELECT * FROM users WHERE id = %s;'
-                    cursor.execute(query, (result[i]['user_id'],))
-                    app.logger.debug(cursor._last_executed)
-                    result_user = cursor.fetchone()
-                    result[i]['username'] = result_user['username']
+                #with conn.cursor() as cursor:
+                #    query = 'SELECT * FROM users WHERE id = %s;'
+                #    cursor.execute(query, (result[i]['user_id'],))
+                #    app.logger.debug(cursor._last_executed)
+                #    result_user = cursor.fetchone()
+                #    result[i]['username'] = result_user['username']
 
                 if item['likes'] is None:
                     result[i]['likes'] = list()
@@ -381,7 +383,6 @@ def get_items():
 
         for r in result:
             del r['likes']
-            del r['user_id']
 
         response = {
             'count': num_total_items,
