@@ -9,14 +9,11 @@ def get_salt():
 
 def get_passwordhash(salt, password):
     string = password + salt
-    for _ in range(1000):
-        cmd = 'echo -n ' + string + ' | openssl sha256'
-        string = (subprocess.check_output(cmd, shell=True)
-                            .decode('utf-8')
-                            .partition(' ')[2]
-                            .rstrip())
-    return string
-
+    cmd = 'echo -n ' + string + ' | openssl sha256'
+    return  (subprocess.check_output(cmd, shell=True)
+                        .decode('utf-8')
+                        .partition(' ')[2]
+                        .rstrip())
 
 def get_today():
     now = dt.today()
