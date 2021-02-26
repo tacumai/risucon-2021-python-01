@@ -344,12 +344,13 @@ def get_items():
 
             result = cursor.fetchall()
 
-            #query = 'SELECT * FROM items'
-            #cursor.execute(query,)
-            #app.logger.debug(cursor._last_executed)
-            #result_for_count = cursor.fetchall()
-            #num_total_items = len(result_for_count)
-            num_total_items = len(result)
+            query = 'SELECT * FROM items'
+            cursor.execute(query,)
+            app.logger.debug(cursor._last_executed)
+            result_for_count = cursor.fetchall()
+            num_total_items = len(result_for_count)
+            query = 'SELECT count(*) FROM items'
+            num_total_items = cursor.execute(query)
 
         if result is None or len(result) <= 0:
             result = list()
